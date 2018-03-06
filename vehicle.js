@@ -8,22 +8,18 @@ function Vehicle(x, y) {
   this.r = 8; 
   this.maxspeed = 10; 
   this.maxforce = 0.3; 
+  this.fleeing = false; 
   // this.maxforce = 1; 
 }
-
-// Vehicle.prototype.behaviors = function() {
-//   let seek = this.seek(this.target); 
-//   this.applyForce(seek);
-// }; 
 
 Vehicle.prototype.behaviors = function() {
   let arrive = this.arrive(this.target); 
   this.applyForce(arrive);
-  let mouse = createVector(mouseX, mouseY); 
+  this.show();
+  let mouse = createVector(mouseX, mouseY);
   let flee = this.flee(mouse); 
   // arrive.mult(1); 
   // flee.mult(3); 
-
   
   this.applyForce(flee); 
 }; 
@@ -34,6 +30,7 @@ Vehicle.prototype.applyForce = function(f) {
 
 Vehicle.prototype.flee = function(target) {
   let desired = p5.Vector.sub(target, this.pos); 
+  this.fleeing = true; 
   let d = desired.mag(); 
   if (d < 60) {
     desired.setMag(this.maxspeed);
@@ -48,6 +45,7 @@ Vehicle.prototype.flee = function(target) {
 
 Vehicle.prototype.arrive = function(target) {
   let desired = p5.Vector.sub(target, this.pos); 
+  this.fleeing = false; 
   let d = desired.mag(); 
   let speed = this.maxspeed; 
   if (d < 100) {
@@ -63,11 +61,16 @@ Vehicle.prototype.update = function() {
   this.pos.add(this.vel); 
   this.vel.add(this.acc);
   this.acc.mult(0); 
+  
 }; 
 
 Vehicle.prototype.show = function() {
-  stroke(255);
+  if (this.fleeing){
+    stroke(66, 82, 188);
+  } else {
+    stroke(255); 
+  }
   strokeWeight(6);
   point(this.pos.x, this.pos.y); 
-  color(255,204,0);
 };
+
