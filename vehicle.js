@@ -1,27 +1,59 @@
 
 // constructor
 function Vehicle(x, y) {
-  this.pos = createVector(x, y); 
+  this.pos = createVector(random(width), random(height)); 
   this.target = createVector(x, y); 
   this.vel = p5.Vector.random2D();
   this.acc = createVector();
   this.r = 8; 
-  this.maxspeed = 5; 
+  this.maxspeed = 10; 
   this.maxforce = 0.3; 
+  // this.maxforce = 1; 
 }
 
+// Vehicle.prototype.behaviors = function() {
+//   let seek = this.seek(this.target); 
+//   this.applyForce(seek);
+// }; 
+
 Vehicle.prototype.behaviors = function() {
-  let seek = this.seek(this.target); 
-  this.applyForce(seek);
+  let arrive = this.arrive(this.target); 
+  this.applyForce(arrive);
+  let mouse = createVector(mouseX, mouseY); 
+  let flee = this.flee(mouse); 
+  // arrive.mult(1); 
+  // flee.mult(3); 
+
+  
+  this.applyForce(flee); 
 }; 
 
 Vehicle.prototype.applyForce = function(f) {
   this.acc.add(f); 
+};  
+
+Vehicle.prototype.flee = function(target) {
+  let desired = p5.Vector.sub(target, this.pos); 
+  let d = desired.mag(); 
+  if (d < 60) {
+    desired.setMag(this.maxspeed);
+    desired.mult(-1); // multiply force in opposite direction
+    let steer = p5.Vector.sub(desired, this.vel);
+    steer.limit(15); 
+    return steer; 
+  } else {
+    return createVector(0, 0); 
+  }
 }; 
 
-Vehicle.prototype.seek = function(target) {
+Vehicle.prototype.arrive = function(target) {
   let desired = p5.Vector.sub(target, this.pos); 
-  desired.setMag(this.maxspeed); 
+  let d = desired.mag(); 
+  let speed = this.maxspeed; 
+  if (d < 100) {
+    speed = map(d, 0, 100, 0, this.maxspeed); 
+  } 
+  desired.setMag(speed); 
   let steer = p5.Vector.sub(desired, this.vel);
   steer.limit(this.maxforce); 
   return steer; 
@@ -37,4 +69,5 @@ Vehicle.prototype.show = function() {
   stroke(255);
   strokeWeight(6);
   point(this.pos.x, this.pos.y); 
+  color(255,204,0);
 };

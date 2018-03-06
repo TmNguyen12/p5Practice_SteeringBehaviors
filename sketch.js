@@ -2,8 +2,8 @@ var font;
 var vehicles = []; 
 
 function preload() {
-  // font = loadFont('AvenirNextLTPro-Demi.otf'); 
-  font = loadFont('Inkland.ttf'); 
+  font = loadFont('AvenirNextLTPro-Demi.otf'); 
+  // font = loadFont('Inkland.ttf'); 
 }
 
 function setup() {
