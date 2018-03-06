@@ -2,7 +2,8 @@ var font;
 var vehicles = []; 
 
 function preload() {
-  font = loadFont('AvenirNextLTPro-Demi.otf'); 
+  // font = loadFont('AvenirNextLTPro-Demi.otf'); 
+  font = loadFont('Inkland.ttf'); 
 }
 
 function setup() {
@@ -14,7 +15,7 @@ function setup() {
   // noStroke(); 
   // text('rainbow', 30, 200); 
 
-  var points = font.textToPoints('Whimsical', 30, 200, 192); 
+  var points = font.textToPoints('Whimsical', 30, 200, 128); 
   // console.log(points); 
 
   for (let i = 0; i < points.length; i++){
@@ -32,6 +33,7 @@ function draw() {
   background(51); 
   for (let i = 0; i < vehicles.length; i++) {
     let v = vehicles[i]; 
+    v.behaviors(); 
     v.update();
     v.show(); 
   }
